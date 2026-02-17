@@ -1,0 +1,20 @@
+name: GitWit CI
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  gitwit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for commit range detection
+
+      - name: Run GitWit Lint
+        uses: rafandoo/gitwit-action@v1
+        with:
+          command: lint
