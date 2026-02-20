@@ -1,0 +1,40 @@
+name: Release Deployment
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+concurrency:
+  group: deploy-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Publish Release Artifacts
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Required for commit range detection
+
+      - name: Run GitWit Changelog
+        id: gitwit
+        uses: rafandoo/gitwit-action@v1.1.0-RC2
+        with:
+          command: changelog
+          changelog_stdout: true
+          args: --for-tag ${{ github.ref_name }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          body: |
+            **${{ steps.gitwit.outputs.changelog }}**
