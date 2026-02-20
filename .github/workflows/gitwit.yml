@@ -15,6 +15,6 @@ jobs:
           fetch-depth: 0  # Required for commit range detection
 
       - name: Run GitWit Lint
-        uses: rafandoo/gitwit-action@v1
+        uses: rafandoo/gitwit-action@v1.1.0-RC2
         with:
           command: lint
