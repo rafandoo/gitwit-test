@@ -29,6 +29,14 @@ jobs:
           changelog_stdout: true
           changelog_from_latest_release: true
 
+      - name: Generate Changelog
+        id: gitwit_2
+        uses: rafandoo/gitwit-action@v1.1.0-RC2
+        with:
+          command: changelog
+          changelog_from_latest_release: true
+          args: --append
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -37,4 +45,10 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            **${{ steps.gitwit.outputs.changelog }}**
+            ${{ steps.gitwit.outputs.changelog }}
+
+      - name: Commit Changelog Update
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: ":alarm_clock:: update changelog for release ${{ github.ref_name }}"
+          default_author: github_actions
