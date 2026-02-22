@@ -20,6 +20,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0  # Required for commit range detection
+          ref: main
 
       - name: Generate Changelog
         id: gitwit
